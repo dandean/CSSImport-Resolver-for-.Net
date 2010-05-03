@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSSImport;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Web;
+using System.Net;
 
 namespace CSSImportTests
 {
@@ -66,6 +68,37 @@ namespace CSSImportTests
             MatchCollection remaining = Regex.Matches(result, @"@import");
             Assert.AreEqual(1, remaining.Count,
                 "Remaining @import statements should be 1 but is " + remaining.Count);
+        }
+
+        [TestMethod]
+        public void TestCSSImportHandler()
+        {
+            string result = string.Empty;
+
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("http://localhost/css/main.css");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            Stream stream = response.GetResponseStream();
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            byte[] buffer = new byte[8192];
+
+            do {
+                // fill the buffer with data
+                count = stream.Read(buffer, 0, buffer.Length);
+
+                // make sure we read some data
+                if (count != 0) {
+                    // translate from bytes to ASCII text
+                    result = Encoding.UTF8.GetString(buffer, 0, count);
+
+                    // continue building the string
+                    sb.Append(result);
+                }
+            }
+            while (count > 0); // any more data to read?
+
+            Assert.IsFalse(string.IsNullOrEmpty(result.Trim()));
         }
     }
 }

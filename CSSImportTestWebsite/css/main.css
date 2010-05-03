@@ -1,0 +1,7 @@
+﻿@import url(one.css);
+@import url(two.css);
+@import url("sub/three.css");
+
+a {
+	text-decoration: line-through;
+}
