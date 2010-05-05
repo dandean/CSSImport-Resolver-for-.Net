@@ -14,6 +14,13 @@
 				<li>Font should be Courier or Mono</li>
 				<li><a href="#">Links</a> should be line-through</li>
 			</ul>
+			
+			<ul id="images">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
 		</form>
 	</body>
 </html>

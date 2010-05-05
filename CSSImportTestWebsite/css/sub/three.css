@@ -1,3 +1,12 @@
-﻿body {
+﻿@import url(../one.css);
+
+body {
 	font-family: Courier, Monospace;
 }
+
+ul#images {}
+	ul#images li:nth-child(3) {
+		background-image: url(../../img/house.jpg);
+		background-size: 140%;
+		background-position: center center;
+	}

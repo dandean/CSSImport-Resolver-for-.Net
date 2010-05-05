@@ -25,7 +25,7 @@ namespace CSSImport
 
             string path = Request.PhysicalPath;
 
-            Resolver resolver = new Resolver();
+            Resolver resolver = new Resolver(context.Request.ApplicationPath);
             string result = resolver.ProcessFile(path);
             Response.Write(result);
         }

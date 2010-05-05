@@ -1,1 +1,24 @@
-﻿three
+﻿@import url(../one.css);
+
+#three {
+	background: red url(one/two/three.gif) left top no-repeat;
+	/* expected: sub/one/two/three.gif */
+
+	background: red url("one/two/thr-ee.png") left top no-repeat;
+	/* expected: "sub/one/two/thr-ee.png" */
+
+	background: red url('one/two/thr_ee.png') left top no-repeat;
+	/* expected: 'sub/one/two/thr_ee.png' */
+
+	background: red url(/one/two/three.png) left top no-repeat;
+	/* expected: /one/two/three.png */
+
+	background: red url(./one/two/three.png) left top no-repeat;
+	/* expected: sub/one/two/three.png */
+
+	background: red url(../one/two/three.png) left top no-repeat;
+	/* expected: one/two/three.png */
+
+	background: red url(http://google.com/one/two/three.png) left top no-repeat;
+	/* expected: http://google.com/one/two/three.png */
+}

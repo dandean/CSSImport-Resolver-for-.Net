@@ -2,6 +2,18 @@
 @import url(two.css);
 @import url("sub/three.css");
 
+ul#images {}
+	ul#images li {
+		display: inline-block;
+		width: 100px;
+		height: 100px;
+		margin: 10px;
+		padding: 0;
+		background-color: Green;
+		background-position: left top;
+		background-repeat: no-repeat;
+	}
+
 a {
 	text-decoration: line-through;
 }
