@@ -15,21 +15,18 @@ namespace CSSImport
     /// </summary>
     public class Resolver
     {
-
         List<string> ImportedFiles = new List<string>();
         string CssFilePath { get; set; }
 
-        public string AppRoot { get; protected set; }
+        public Resolver() { }
 
-        public Resolver(string root)
-        {
-            root = Path.GetFullPath(root);
-            if (!Directory.Exists(root)) {
-                throw new DirectoryNotFoundException();
-            }
-            AppRoot = root;
-        }
-
+        /// <summary>
+        /// Processes the file and returns the merged results. Also
+        /// collects an array of merged files which is available via the
+        /// GetListOfFiles method.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
         public string ProcessFile(string path)
         {
             path = Path.GetFullPath(path);
@@ -38,15 +35,25 @@ namespace CSSImport
                 throw new FileNotFoundException();
             }
 
+            ImportedFiles.Clear();
+
             // Store the value of the file path
             CssFilePath = path;
             string result = ProcessFileRecursive(path);
 
             // Reset the value of the file path
             CssFilePath = null;
-            ImportedFiles.Clear();
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the list of files imported during the last ProcessFile call.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetListOfFiles()
+        {
+            return ImportedFiles.ToArray();
         }
 
         string ProcessFileRecursive(string path)
@@ -86,13 +93,13 @@ namespace CSSImport
                         string currentDir = Path.GetDirectoryName(path);
 
                         // The prefix is the current directory minus the source directory
-                        string prefix = Regex.Replace(currentDir, "^" + Regex.Escape(sourceDir), "");
+                        string prefix = Regex.Replace(currentDir, "^" + Regex.Escape(sourceDir), "", RegexOptions.IgnoreCase);
 
                         if (!string.IsNullOrEmpty(prefix)) {
                             // Convert windows-style path to url path
                             prefix = Regex
                                 // Remove leading slashes
-                                .Replace(prefix, @"^\\", "")
+                                .Replace(prefix, @"^\\", "", RegexOptions.IgnoreCase)
                                 // Make back-slashes into forward slashes
                                 .Replace(@"\", "/");
 
@@ -101,7 +108,7 @@ namespace CSSImport
 
                             // TODO: correctly replace path
                             // Replace original url in css with new rewritten url.
-                            css = Regex.Replace(css, Regex.Escape(url), "url(" + rewrittenPath + ")");
+                            css = Regex.Replace(css, Regex.Escape(url), "url(" + rewrittenPath + ")", RegexOptions.IgnoreCase);
                         }
                     }
                 }
@@ -148,9 +155,9 @@ namespace CSSImport
             return result.ToArray();
         }
 
-        public static string ProcessFile(string appRoot, string cssFilePath)
+        public static string Crush(string cssFilePath)
         {
-            return new Resolver(appRoot).ProcessFile(cssFilePath);
+            return new Resolver().ProcessFile(cssFilePath);
         }
     }
 }

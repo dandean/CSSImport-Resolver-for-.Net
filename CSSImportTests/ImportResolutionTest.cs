@@ -18,7 +18,7 @@ namespace CSSImportTests
     [TestClass]
     public class ImportResolutionTest
     {
-        Resolver resolver = new Resolver(@"C:\Projects\CSSImport\CSSImportTests");
+        Resolver resolver = new Resolver();
 
         public ImportResolutionTest() { }
 
